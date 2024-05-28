@@ -31,7 +31,7 @@ def make_doc_header(target, source, env):
         # Use maximum zlib compression level to further reduce file size
         # (at the cost of initial build times).
         buf = zlib.compress(buf, zlib.Z_BEST_COMPRESSION)
-        doc_data_hash = hashlib.md5(buf).hexdigest()
+        doc_data_hash = hashlib.sha256(buf).hexdigest()
 
         g.write("/* THIS FILE IS GENERATED DO NOT EDIT */\n")
         g.write("#ifndef _DOC_DATA_RAW_H\n")
