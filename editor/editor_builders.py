@@ -1,6 +1,5 @@
 """Functions used to generate source files during build time"""
 
-import hashlib
 import os
 import os.path
 import shutil
@@ -31,12 +30,12 @@ def make_doc_header(target, source, env):
         # Use maximum zlib compression level to further reduce file size
         # (at the cost of initial build times).
         buf = zlib.compress(buf, zlib.Z_BEST_COMPRESSION)
-        doc_data_hash = hashlib.md5(buf).hexdigest()
+        doc_data_hash = zlib.adler32(buf)
 
         g.write("/* THIS FILE IS GENERATED DO NOT EDIT */\n")
         g.write("#ifndef _DOC_DATA_RAW_H\n")
         g.write("#define _DOC_DATA_RAW_H\n")
-        g.write('static const char *_doc_data_hash = "' + doc_data_hash + '";\n')
+        g.write('static const char *_doc_data_hash = "' + str(doc_data_hash) + '";\n')
         g.write("static const int _doc_data_compressed_size = " + str(len(buf)) + ";\n")
         g.write("static const int _doc_data_uncompressed_size = " + str(decomp_size) + ";\n")
         g.write("static const unsigned char _doc_data_compressed[] = {\n")
